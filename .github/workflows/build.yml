@@ -13,16 +13,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up JDK 8
+      - name: Set up JDK 17 (for sdkmanager) and JDK 8 (for Gradle build)
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '8'
+          java-version: |
+            17
+            8
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        env:
+          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
 
       - name: Install old SDK platform & build-tools
+        env:
+          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
         run: |
           sdkmanager "platforms;android-26" "build-tools;26.0.1" "platform-tools"
 
@@ -38,6 +44,8 @@ jobs:
 
       - name: Run build
         working-directory: SWFDecompiler
+        env:
+          JAVA_HOME: ${{ env.JAVA_HOME_8_X64 }}
         run: gradle assembleDebug --stacktrace
 
       - name: Upload APK
