@@ -38,10 +38,12 @@ jobs:
           sed -i "s#jcenter()#maven { url 'https://jcenter.bintray.com' }\n        maven { url 'https://dl.google.com/dl/android/maven2/' }#g" build.gradle
           sed -i "s#classpath 'com.android.tools.build:gradle:1.+'#classpath 'com.android.tools.build:gradle:3.0.1'#" build.gradle
 
-      - name: Patch app/build.gradle (buildToolsVersion to match D8-capable tools)
+      - name: Patch app/build.gradle (buildToolsVersion, minSdkVersion, Java 8 desugaring)
         working-directory: SWFDecompiler
         run: |
           sed -i 's#buildToolsVersion "26.0.1"#buildToolsVersion "27.0.3"#' app/build.gradle
+          sed -i 's#minSdkVersion 25#minSdkVersion 26#' app/build.gradle
+          sed -i '/^android {/a\    compileOptions {\n        sourceCompatibility 1.8\n        targetCompatibility 1.8\n    }' app/build.gradle
 
       - name: Set up Gradle 4.1
         uses: gradle/actions/setup-gradle@v4
