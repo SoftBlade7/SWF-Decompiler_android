@@ -35,7 +35,7 @@ jobs:
       - name: Patch repositories (jcenter is dead)
         working-directory: SWFDecompiler
         run: |
-          sed -i "s#jcenter()#maven { url 'https://jcenter.bintray.com' }\n        google()#g" build.gradle
+          sed -i "s#jcenter()#maven { url 'https://jcenter.bintray.com' }\n        maven { url 'https://dl.google.com/dl/android/maven2/' }#g" build.gradle
 
       - name: Set up Gradle 2.14.1
         uses: gradle/actions/setup-gradle@v4
